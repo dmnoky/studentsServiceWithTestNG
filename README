@@ -1,0 +1,42 @@
+Структура пакета:
+1) в папке studentsService находятся исходники проекта для 1 задания док файла - проект без зависимостей и тест файла.
+2) в папке studentsServiceTest находятся исходники проекта для 2 задания док файла - проект с тест-зависимостями и тест файлом.
+3) в папке test находятся файлы для запуска автотестов. Команда для запуска:
+	$ java -cp testng-7.1.0.jar;jcommander-1.72.jar;guice-4.1.0-no_aop.jar;MockFtpServer-2.7.1.jar;slf4j-api-1.6.6.jar;target/classes;target/test-classes org.testng.TestNG testing.xml
+После запуска формируется папка test-output, в которой можно открыть index.html, где в Results будет результат тестирования.
+4) для удобства добавил studentsServiceFTP_FakeServer-1.0-jar-with-dependencies.jar - поднимает сервак с предзаполненным списком студентов.
+Команда для запуска: 
+	$ java -jar studentsServiceFTP_FakeServer-1.0-jar-with-dependencies.jar
+Параметры для входа:
+	- логин: user
+	- пароль: password
+	- адрес: localhost
+5) сам проект можно запустить из корневой папки (где studentsService-1.0.jar) командой:
+	$ java -jar studentsService-1.0.jar
+
+Список команд studentsService:
+    "'/add student' (Добавление студента (id генерируется автоматически))"
+    "'/remove student' (Удаление студента по id)"
+    "'/get student' (Получение информации о студенте по id)"
+    "'/get students' (Получение списка студентов по имени)"
+    "'/exit' (Завершение работы)"
+    "'/help' (Вывод списка команд)"
+
+Описание автотестов (studentsServiceTest\src\test\java\ru\infotecs\studentsService\StudentControllerTest.java):
+1) rowsIsSortedByName - проверяет получаемый с сервера список на сортивроку по имени (ASC);
+2) addRowsThenCheckListSizeAndSortedByName - проверяет как сохраняются новые записи на сервер + ещё проверка на сортировку по имени (ASC);
+3) removeExistRowThenCheckListSize - удаляется ли существующая запись из списка;
+4) getExistRows - возвращается ли существующая/новая запись при её запросе с сервера;
+5) removeRowEmptyListExpectedErr - ожидаем ошибку удаления записи, так как лист пуст;
+6) findRowEmptyListExpectedErr - ожидаем ошибку поиска записи, так как лист пуст;
+7) removeRowNotFoundExpectedErr - ожидаем ошибку удаления записи, так как её нет в листе;
+8) findRowNotFoundRowExpectedErr - ожидаем ошибку поиска записи, так как её нет в листе.
+Больше комментариев в studentsServiceTest\src\test\java\ru\infotecs\studentsService\StudentControllerTest.java
+
+Краткое описание задачи (док файл):
+1. Одно из условий задачи (док файл): юзать JDK 8 без внешних библиотек.
+2. Парсер json (ru.infotecs.studentsService.util.json.mapper.*) по условиям - кастомный и получился очень специфичным, больше под эту задачу, где не учитывается наследование, сложные поля и тд.
+3. Список студентов для каждой операции всегда загружается заново, так как предпологается, что список изменяется не только нами.
+4. Не понял условие "Получение списка студентов по имени" - имелось ввиду "Поиск по имени"?
+ Но тогда зачем условие "Список студентов при выводе отсортирован по алфавиту"?
+ Поиск по имени закомментил, оставил только сортировку.

@@ -1,0 +1,1 @@
+java -jar studentsService-1.0.jar
